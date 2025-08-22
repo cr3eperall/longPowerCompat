@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.cr3eperall.longpowercompat.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "brandonscore.EnergyUtilsMixin",
+    "brandonscore.TileCapabilityManagerMixin",
+    "fluxnetworks.EnergyUtilsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
