@@ -6,7 +6,11 @@
   "mixins": [
     "brandonscore.EnergyUtilsMixin",
     "brandonscore.TileCapabilityManagerMixin",
-    "fluxnetworks.EnergyUtilsMixin"
+    "fluxnetworks.EnergyUtilsMixin",
+    "gregfluxology.FEToEUProviderMixin",
+    "gtceu.ForgeCommonEventListenerMixin",
+    "gregfluxology.FEToEUProviderMixin$FEEnergyWrapper"
+  
   ],
   "injectors": {
     "defaultRequire": 1
