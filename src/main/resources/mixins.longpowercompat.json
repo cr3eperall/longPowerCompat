@@ -8,9 +8,10 @@
     "brandonscore.TileCapabilityManagerMixin",
     "fluxnetworks.EnergyUtilsMixin",
     "gregfluxology.FEToEUProviderMixin",
+    "gregfluxology.FEToEUProviderMixin$FEEnergyWrapper",
+    "gtceu.ConverterTraitMixin",
     "gtceu.ForgeCommonEventListenerMixin",
-    "gregfluxology.FEToEUProviderMixin$FEEnergyWrapper"
-  
+    "gtceu.MetaMachineBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
