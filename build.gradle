@@ -152,14 +152,18 @@ dependencies {
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     compileOnly fg.deobf("curse.maven:flux-networks-248020:${flux_networks_id}")
     compileOnly fg.deobf("com.brandon3055.brandonscore:BrandonsCore:${minecraft_version}-${bcore_version}:universal")
     compileOnly fg.deobf("curse.maven:gregtechceu-modern-890405:${gregtech_id}")
     compileOnly fg.deobf("curse.maven:gregfluxology-1106032:${greg_fluxology_id}")
     compileOnly fg.deobf("curse.maven:ldlib-626676:6899193")
+    compileOnly fg.deobf("curse.maven:multiblocked2-1104057:${multiblocked2_id}")
 
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
     runtimeOnly fg.deobf("curse.maven:flux-networks-248020:${flux_networks_id}")
     runtimeOnly fg.deobf("curse.maven:mekanism-268560:${mekanism_id}")
     runtimeOnly fg.deobf("com.brandon3055.brandonscore:BrandonsCore:${minecraft_version}-${bcore_version}:universal")
@@ -167,6 +171,7 @@ dependencies {
     runtimeOnly fg.deobf("com.brandon3055.draconicevolution:Draconic-Evolution:${minecraft_version}-${de_version}:universal")
     runtimeOnly fg.deobf("curse.maven:gregtechceu-modern-890405:${gregtech_id}")
     runtimeOnly fg.deobf("curse.maven:gregfluxology-1106032:${greg_fluxology_id}")
+    runtimeOnly fg.deobf("curse.maven:multiblocked2-1104057:${multiblocked2_id}")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

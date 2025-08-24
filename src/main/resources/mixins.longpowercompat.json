@@ -11,7 +11,9 @@
     "gregfluxology.FEToEUProviderMixin$FEEnergyWrapper",
     "gtceu.ConverterTraitMixin",
     "gtceu.ForgeCommonEventListenerMixin",
-    "gtceu.MetaMachineBlockEntityMixin"
+    "gtceu.MetaMachineBlockEntityMixin",
+    "mbd2.MBDRecipeCapabilitiesMixin",
+    "mbd2.MBDTraitDefinitionTypesMixin"
   ],
   "injectors": {
     "defaultRequire": 1
