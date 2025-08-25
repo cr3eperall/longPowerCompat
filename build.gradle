@@ -161,6 +161,7 @@ dependencies {
     compileOnly fg.deobf("curse.maven:gregfluxology-1106032:${greg_fluxology_id}")
     compileOnly fg.deobf("curse.maven:ldlib-626676:6899193")
     compileOnly fg.deobf("curse.maven:multiblocked2-1104057:${multiblocked2_id}")
+    compileOnly fg.deobf("curse.maven:mekanism-268560:${mekanism_id}")
 
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
     runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")

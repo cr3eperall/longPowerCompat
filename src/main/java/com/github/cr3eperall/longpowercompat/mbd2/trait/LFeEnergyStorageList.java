@@ -1,15 +1,15 @@
 package com.github.cr3eperall.longpowercompat.mbd2.trait;
 
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
+import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 
 import java.util.Arrays;
 
 //TODO: check if overflows are possible
-public record FNEnergyStorageList(IFNEnergyStorage[] storages) implements IFNEnergyStorage {
+public record LFeEnergyStorageList(ILongFeStorage[] storages) implements ILongFeStorage {
     @Override
     public long receiveEnergyL(long maxReceive, boolean simulated) {
         long received = 0;
-        for (IFNEnergyStorage storage : storages) {
+        for (ILongFeStorage storage : storages) {
             received += storage.receiveEnergyL(maxReceive - received, simulated);
             if (received >= maxReceive) {
                 break;
@@ -21,7 +21,7 @@ public record FNEnergyStorageList(IFNEnergyStorage[] storages) implements IFNEne
     @Override
     public long extractEnergyL(long maxExtract, boolean simulated) {
         long extracted = 0;
-        for (IFNEnergyStorage storage : storages) {
+        for (ILongFeStorage storage : storages) {
             extracted += storage.extractEnergyL(maxExtract - extracted, simulated);
             if (extracted >= maxExtract) {
                 break;
@@ -42,11 +42,11 @@ public record FNEnergyStorageList(IFNEnergyStorage[] storages) implements IFNEne
 
     @Override
     public boolean canExtract() {
-        return Arrays.stream(storages).anyMatch(IFNEnergyStorage::canExtract);
+        return Arrays.stream(storages).anyMatch(ILongFeStorage::canExtract);
     }
 
     @Override
     public boolean canReceive() {
-        return Arrays.stream(storages).anyMatch(IFNEnergyStorage::canReceive);
+        return Arrays.stream(storages).anyMatch(ILongFeStorage::canReceive);
     }
 }

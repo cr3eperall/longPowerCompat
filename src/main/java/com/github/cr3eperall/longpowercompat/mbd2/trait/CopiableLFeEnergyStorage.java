@@ -1,32 +1,29 @@
 package com.github.cr3eperall.longpowercompat.mbd2.trait;
 
+import com.github.cr3eperall.longpowercompat.capability.LongFeStorage;
 import com.lowdragmc.lowdraglib.syncdata.IContentChangeAware;
 import com.lowdragmc.lowdraglib.syncdata.ITagSerializable;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.energy.EnergyStorage;
-import sonar.fluxnetworks.api.energy.FNEnergyStorage;
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
 
-public class CopiableFNEnergyStorage extends FNEnergyStorage implements ITagSerializable<Tag>, IContentChangeAware {
+public class CopiableLFeEnergyStorage extends LongFeStorage implements ITagSerializable<Tag>, IContentChangeAware {
     @Getter
     @Setter
     public Runnable onContentsChanged = () -> {};
 
-    public CopiableFNEnergyStorage(long capacity){
+    public CopiableLFeEnergyStorage(long capacity){
         super(capacity);
     }
 
-    public CopiableFNEnergyStorage(long capacity, long energy){
+    public CopiableLFeEnergyStorage(long capacity, long energy){
         super(capacity, capacity, capacity, energy);
     }
-    public CopiableFNEnergyStorage(long capacity, long maxReceive, long maxExtract){
+    public CopiableLFeEnergyStorage(long capacity, long maxReceive, long maxExtract){
         super(capacity, maxReceive, maxExtract);
     }
-    public CopiableFNEnergyStorage(long capacity, long maxReceive, long maxExtract, long energy){
+    public CopiableLFeEnergyStorage(long capacity, long maxReceive, long maxExtract, long energy){
         super(capacity, maxReceive, maxExtract, energy);
     }
 
@@ -66,8 +63,8 @@ public class CopiableFNEnergyStorage extends FNEnergyStorage implements ITagSeri
         return extracted;
     }
 
-    public CopiableFNEnergyStorage copy(){
-        return new CopiableFNEnergyStorage(capacity, maxReceive, maxExtract, energy);
+    public CopiableLFeEnergyStorage copy(){
+        return new CopiableLFeEnergyStorage(capacity, maxReceive, maxExtract, energy);
     }
 
 

@@ -2,17 +2,17 @@ package com.github.cr3eperall.longpowercompat.brandonscore;
 
 import com.brandon3055.brandonscore.api.power.IOPStorage;
 import com.github.cr3eperall.longpowercompat.LongPowerCompat;
+import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
 
-public class FNToOPWrapper implements IOPStorage {
+public class LFeToOPWrapper implements IOPStorage {
 
-    private final IFNEnergyStorage storage;
+    private final ILongFeStorage storage;
 
     private static final Logger LOGGER = LogManager.getLogger(LongPowerCompat.MODID);
 
-    public FNToOPWrapper(IFNEnergyStorage storage) {
+    public LFeToOPWrapper(ILongFeStorage storage) {
         this.storage = storage;
     }
 

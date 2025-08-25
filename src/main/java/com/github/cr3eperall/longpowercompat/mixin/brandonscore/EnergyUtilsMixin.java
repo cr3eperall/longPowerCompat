@@ -3,7 +3,9 @@ package com.github.cr3eperall.longpowercompat.mixin.brandonscore;
 import com.brandon3055.brandonscore.api.power.IOPStorage;
 import com.brandon3055.brandonscore.capability.CapabilityOP;
 import com.brandon3055.brandonscore.capability.OPWrappers;
-import com.github.cr3eperall.longpowercompat.brandonscore.FNToOPWrapper;
+import com.github.cr3eperall.longpowercompat.LongPowerCapabilities;
+import com.github.cr3eperall.longpowercompat.brandonscore.LFeToOPWrapper;
+import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -11,8 +13,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import sonar.fluxnetworks.api.FluxCapabilities;
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
 
 @Mixin(com.brandon3055.brandonscore.utils.EnergyUtils.class)
 public class EnergyUtilsMixin {
@@ -29,9 +29,9 @@ public class EnergyUtilsMixin {
         if (op.isPresent()) {
             return op.orElseThrow(NullPointerException::new); // not throwing a ImpossibleException here because I can't get it to work.
         }
-        LazyOptional<IFNEnergyStorage> fn = provider.getCapability(FluxCapabilities.FN_ENERGY_STORAGE, side);
-        if (fn.isPresent()) {
-            return new FNToOPWrapper(fn.orElseThrow(NullPointerException::new)); // not throwing a ImpossibleException here because I can't get it to work.
+        LazyOptional<ILongFeStorage> lFe = provider.getCapability(LongPowerCapabilities.LONG_FE_STORAGE, side);
+        if (lFe.isPresent()) {
+            return new LFeToOPWrapper(lFe.orElseThrow(NullPointerException::new)); // not throwing a ImpossibleException here because I can't get it to work.
         }
         LazyOptional<IEnergyStorage> fe = provider.getCapability(ForgeCapabilities.ENERGY, side);
         if (fe.isPresent()) {

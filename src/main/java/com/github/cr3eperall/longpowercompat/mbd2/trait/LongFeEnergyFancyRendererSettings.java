@@ -25,26 +25,26 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 import org.lwjgl.opengl.GL11;
 
-public class FluxNetworksFancyRendererSettings extends FancyRendererSettings {
-    private final FluxNetworksCapabilityTraitDefinition definition;
+public class LongFeEnergyFancyRendererSettings extends FancyRendererSettings {
+    private final LongFeEnergyCapabilityTraitDefinition definition;
 
     @Getter
     @Setter
     @Configurable(name = "config.definition.trait.fancy_renderer.color", tips = "config.definition.trait.fancy_renderer.color.tooltip")
     @NumberColor
-    private int color = 0xaaaa0011;
+    private int color = 0xfa168111;
     @Getter
     @Setter
     @Configurable(name = "config.definition.trait.fancy_renderer.percent_height", tips = "config.definition.trait.fancy_renderer.percent_height.tooltip")
     private boolean percentHeight = false;
 
-    public FluxNetworksFancyRendererSettings(FluxNetworksCapabilityTraitDefinition definition){
+    public LongFeEnergyFancyRendererSettings(LongFeEnergyCapabilityTraitDefinition definition){
         this.definition=definition;
     }
 
     @Override
     public IRenderer createFancyRenderer() {
-        return new FluxNetworksFancyRendererSettings.Renderer();
+        return new LongFeEnergyFancyRendererSettings.Renderer();
     }
 
     private class Renderer implements IRenderer{
@@ -59,7 +59,7 @@ public class FluxNetworksFancyRendererSettings extends FancyRendererSettings {
         public void render(BlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
             var optional = blockEntity.getCapability(MBDCapabilities.CAPABILITY_MACHINE).resolve();
             if (optional.isPresent() && optional.get() instanceof MBDMachine machine) {
-                if (machine.getTraitByDefinition(definition) instanceof FluxNetworksCapabilityTrait trait) {
+                if (machine.getTraitByDefinition(definition) instanceof LongFeEnergyCapabilityTrait trait) {
                     var storage = trait.storage;
                     if (storage.getEnergyStoredL() == 0 || storage.getMaxEnergyStoredL() == 0) return;
 

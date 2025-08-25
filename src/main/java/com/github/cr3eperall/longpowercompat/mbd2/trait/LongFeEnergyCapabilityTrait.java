@@ -1,7 +1,8 @@
 package com.github.cr3eperall.longpowercompat.mbd2.trait;
 
-import com.github.cr3eperall.longpowercompat.LongUtils;
-import com.github.cr3eperall.longpowercompat.mbd2.FluxNetworksRecipeCapability;
+import com.github.cr3eperall.longpowercompat.LongPowerCapabilities;
+import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
+import com.github.cr3eperall.longpowercompat.mbd2.LongFeRecipeCapability;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
@@ -15,35 +16,32 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
-import sonar.fluxnetworks.api.FluxCapabilities;
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
 
 import java.util.List;
 import java.util.Optional;
 
 @Getter
-public class FluxNetworksCapabilityTrait extends SimpleCapabilityTrait implements IAutoIOTrait {
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(FluxNetworksCapabilityTrait.class);
+public class LongFeEnergyCapabilityTrait extends SimpleCapabilityTrait implements IAutoIOTrait {
+    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(LongFeEnergyCapabilityTrait.class);
     @Override
     public ManagedFieldHolder getFieldHolder() { return MANAGED_FIELD_HOLDER; }
 
     @Persisted
     @DescSynced
-    public final CopiableFNEnergyStorage storage;
+    public final CopiableLFeEnergyStorage storage;
     private final FluxNetworksRecipeHandler recipeHandler=new FluxNetworksRecipeHandler();
     private final FluxNetworksStorageCap energyStorageCap = new FluxNetworksStorageCap();
 
-    public FluxNetworksCapabilityTrait(MBDMachine machine, FluxNetworksCapabilityTraitDefinition definition) {
+    public LongFeEnergyCapabilityTrait(MBDMachine machine, LongFeEnergyCapabilityTraitDefinition definition) {
         super(machine, definition);
         storage = createStorages();
         storage.setOnContentsChanged(this::notifyListeners);
     }
 
     @Override
-    public FluxNetworksCapabilityTraitDefinition getDefinition() {
-        return (FluxNetworksCapabilityTraitDefinition) super.getDefinition();
+    public LongFeEnergyCapabilityTraitDefinition getDefinition() {
+        return (LongFeEnergyCapabilityTraitDefinition) super.getDefinition();
     }
 
     @Override
@@ -51,8 +49,8 @@ public class FluxNetworksCapabilityTrait extends SimpleCapabilityTrait implement
         storage.receiveEnergyL(getDefinition().getCapacity()/2, false);
     }
 
-    protected CopiableFNEnergyStorage createStorages(){
-        return new CopiableFNEnergyStorage(getDefinition().getCapacity());
+    protected CopiableLFeEnergyStorage createStorages(){
+        return new CopiableLFeEnergyStorage(getDefinition().getCapacity());
     }
 
     @Override
@@ -75,17 +73,17 @@ public class FluxNetworksCapabilityTrait extends SimpleCapabilityTrait implement
         if (io.support(IO.IN)) {
             Optional.ofNullable(getMachine().getLevel().getBlockEntity(port.relative(side)))
                 .flatMap(be -> {
-                    Optional<IFNEnergyStorage> cap;
-                    if ((cap = be.getCapability(FluxCapabilities.FN_ENERGY_STORAGE, side.getOpposite()).resolve()).isPresent()) {
+                    Optional<ILongFeStorage> cap;
+                    if ((cap = be.getCapability(LongPowerCapabilities.LONG_FE_STORAGE, side.getOpposite()).resolve()).isPresent()) {
                         return cap;
                     }else {
                         return be.getCapability(ForgeCapabilities.ENERGY, side.getOpposite()).resolve();
                     }
                 })
                 .ifPresent(source -> {
-                    if (source instanceof IFNEnergyStorage fnSource) {
-                        fnSource.extractEnergyL(
-                                storage.receiveEnergyL(fnSource.extractEnergyL(getDefinition().getMaxReceive(), true),
+                    if (source instanceof ILongFeStorage lFeSource) {
+                        lFeSource.extractEnergyL(
+                                storage.receiveEnergyL(lFeSource.extractEnergyL(getDefinition().getMaxReceive(), true),
                                         false),
                                 false);
                     } else if (source instanceof net.minecraftforge.energy.IEnergyStorage feSource) {
@@ -100,17 +98,17 @@ public class FluxNetworksCapabilityTrait extends SimpleCapabilityTrait implement
         if (io.support(IO.OUT)){
             Optional.ofNullable(getMachine().getLevel().getBlockEntity(port.relative(side)))
                 .flatMap(be -> {
-                    Optional<IFNEnergyStorage> cap;
-                    if ((cap = be.getCapability(FluxCapabilities.FN_ENERGY_STORAGE, side.getOpposite()).resolve()).isPresent()) {
+                    Optional<ILongFeStorage> cap;
+                    if ((cap = be.getCapability(LongPowerCapabilities.LONG_FE_STORAGE, side.getOpposite()).resolve()).isPresent()) {
                         return cap;
                     }else {
                         return be.getCapability(ForgeCapabilities.ENERGY, side.getOpposite()).resolve();
                     }
                 })
                 .ifPresent( target -> {
-                    if (target instanceof IFNEnergyStorage fnTarget) {
-                        fnTarget.receiveEnergyL(
-                                storage.extractEnergyL(fnTarget.receiveEnergyL(getDefinition().getMaxExtract(), true),
+                    if (target instanceof ILongFeStorage lFeTarget) {
+                        lFeTarget.receiveEnergyL(
+                                storage.extractEnergyL(lFeTarget.receiveEnergyL(getDefinition().getMaxExtract(), true),
                                         false),
                                 false);
                     } else if (target instanceof net.minecraftforge.energy.IEnergyStorage feTarget) {
@@ -126,7 +124,7 @@ public class FluxNetworksCapabilityTrait extends SimpleCapabilityTrait implement
 
     public class FluxNetworksRecipeHandler extends RecipeHandlerTrait<Long> {
         protected FluxNetworksRecipeHandler() {
-            super(FluxNetworksCapabilityTrait.this, FluxNetworksRecipeCapability.CAP);
+            super(LongFeEnergyCapabilityTrait.this, LongFeRecipeCapability.CAP);
         }
 
         //TODO: check if overflow is possible
@@ -134,7 +132,7 @@ public class FluxNetworksCapabilityTrait extends SimpleCapabilityTrait implement
         public List<Long> handleRecipeInner(IO io, MBDRecipe recipe, List<Long> left, @Nullable String slotName, boolean simulate) {
             if (!compatibleWith(io)) return left;
             long required = left.stream().reduce(0L, Long::sum);
-            CopiableFNEnergyStorage capability = simulate ? storage.copy() : storage;
+            CopiableLFeEnergyStorage capability = simulate ? storage.copy() : storage;
             if (io == IO.IN) {
                 long extracted = capability.extractEnergyL(required, simulate);
                 required-=extracted;
@@ -147,26 +145,26 @@ public class FluxNetworksCapabilityTrait extends SimpleCapabilityTrait implement
     }
 
     //TODO: check if Forge energy also works with this
-    public class FluxNetworksStorageCap implements ICapabilityProviderTrait<IFNEnergyStorage> {
+    public class FluxNetworksStorageCap implements ICapabilityProviderTrait<ILongFeStorage> {
 
         @Override
         public IO getCapabilityIO(@Nullable Direction side) {
-            return FluxNetworksCapabilityTrait.this.getCapabilityIO(side);
+            return LongFeEnergyCapabilityTrait.this.getCapabilityIO(side);
         }
 
         @Override
-        public Capability<IFNEnergyStorage> getCapability() {
-            return FluxCapabilities.FN_ENERGY_STORAGE;
+        public Capability<ILongFeStorage> getCapability() {
+            return LongPowerCapabilities.LONG_FE_STORAGE;
         }
 
         @Override
-        public IFNEnergyStorage getCapContent(IO io) {
-            return new FNEnergyStorageWrapper(storage, io, getDefinition().getMaxReceive(), getDefinition().getMaxExtract());
+        public ILongFeStorage getCapContent(IO io) {
+            return new LFeEnergyStorageWrapper(storage, io, getDefinition().getMaxReceive(), getDefinition().getMaxExtract());
         }
 
         @Override
-        public IFNEnergyStorage mergeContents(List<IFNEnergyStorage> contents) {
-            return new FNEnergyStorageList(contents.toArray(new IFNEnergyStorage[0]));
+        public ILongFeStorage mergeContents(List<ILongFeStorage> contents) {
+            return new LFeEnergyStorageList(contents.toArray(new ILongFeStorage[0]));
         }
     }
 }

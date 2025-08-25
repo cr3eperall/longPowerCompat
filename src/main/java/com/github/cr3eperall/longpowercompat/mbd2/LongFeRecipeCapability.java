@@ -18,14 +18,14 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class FluxNetworksRecipeCapability extends RecipeCapability <Long>{
-    public static final FluxNetworksRecipeCapability CAP = new FluxNetworksRecipeCapability();
+public class LongFeRecipeCapability extends RecipeCapability <Long>{
+    public static final LongFeRecipeCapability CAP = new LongFeRecipeCapability();
     //TODO: change textures
     public final static ResourceTexture ENERGY_BAR = new ResourceTexture("mbd2:textures/gui/energy_bar_base.png");
     public final static ResourceBorderTexture ENERGY_BASE = new ResourceBorderTexture("mbd2:textures/gui/energy_bar_background.png", 42, 14, 1, 1);
 
-    protected FluxNetworksRecipeCapability(){
-        super("fluxnetworks_energy", SerializerLong.INSTANCE);
+    protected LongFeRecipeCapability(){
+        super("longpower_energy", SerializerLong.INSTANCE);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class FluxNetworksRecipeCapability extends RecipeCapability <Long>{
 
     @Override
     public void createContentConfigurator(ConfiguratorGroup father, Supplier<Long> supplier, Consumer<Long> onUpdate) {
-        father.addConfigurators(new NumberConfigurator("recipe.capability.fluxnetworks_energy.energy", supplier::get,
+        father.addConfigurators(new NumberConfigurator("recipe.capability.longpower_energy.energy", supplier::get,
                 number -> onUpdate.accept(number.longValue()), 1, true).setRange(1, Long.MAX_VALUE));
     }
 

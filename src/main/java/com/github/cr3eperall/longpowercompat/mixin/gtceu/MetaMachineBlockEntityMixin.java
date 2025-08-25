@@ -1,11 +1,12 @@
 package com.github.cr3eperall.longpowercompat.mixin.gtceu;
 
+import com.github.cr3eperall.longpowercompat.LongPowerCapabilities;
+import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.MachineTrait;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,8 +15,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import sonar.fluxnetworks.api.FluxCapabilities;
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
 
 import java.util.List;
 
@@ -31,16 +30,16 @@ public abstract class MetaMachineBlockEntityMixin {
             at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/GTCEu$Mods;isAE2Loaded()Z"),
             cancellable = true)
     private static <T> void getCapability(MetaMachine machine, @NotNull Capability<T> cap, @Nullable Direction side, CallbackInfoReturnable<LazyOptional<T>> cir) {
-        if (machine instanceof IFNEnergyStorage energyStorage) {
+        if (machine instanceof ILongFeStorage energyStorage) {
             cir.setReturnValue(
-                    FluxCapabilities.FN_ENERGY_STORAGE.orEmpty(cap, LazyOptional.of(() -> energyStorage))
+                    LongPowerCapabilities.LONG_FE_STORAGE.orEmpty(cap, LazyOptional.of(() -> energyStorage))
             );
         }
 
-        List<IFNEnergyStorage> list = getCapabilitiesFromTraits(machine.getTraits(), side, IFNEnergyStorage.class);
+        List<ILongFeStorage> list = getCapabilitiesFromTraits(machine.getTraits(), side, ILongFeStorage.class);
         if (!list.isEmpty()) {
             cir.setReturnValue(
-                    FluxCapabilities.FN_ENERGY_STORAGE.orEmpty(cap, LazyOptional.of(() -> (IFNEnergyStorage) list.get(0)))
+                    LongPowerCapabilities.LONG_FE_STORAGE.orEmpty(cap, LazyOptional.of(() -> (ILongFeStorage) list.get(0)))
             );
         }
     }

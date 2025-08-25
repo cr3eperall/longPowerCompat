@@ -1,21 +1,18 @@
 package com.github.cr3eperall.longpowercompat.gtceu;
 
 import com.github.cr3eperall.longpowercompat.LongUtils;
-import com.gregtechceu.gtceu.GTCEu;
+import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.common.pipelike.cable.EnergyNetHandler;
 import gregfluxology.GFyConfig;
-import gregfluxology.util.GFyUtility;
 import net.minecraft.core.Direction;
-import net.minecraftforge.energy.IEnergyStorage;
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
 
-public class FNEnergyWrapper implements IFNEnergyStorage{
+public class LFeEnergyWrapper implements ILongFeStorage {
     private final IEnergyContainer energyContainer;
     private final Direction facing;
 
-    public FNEnergyWrapper(IEnergyContainer energyContainer, Direction facing) {
+    public LFeEnergyWrapper(IEnergyContainer energyContainer, Direction facing) {
         this.energyContainer = energyContainer;
         this.facing = facing;
     }

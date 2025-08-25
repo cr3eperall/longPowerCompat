@@ -13,7 +13,8 @@
     "gtceu.ForgeCommonEventListenerMixin",
     "gtceu.MetaMachineBlockEntityMixin",
     "mbd2.MBDRecipeCapabilitiesMixin",
-    "mbd2.MBDTraitDefinitionTypesMixin"
+    "mbd2.MBDTraitDefinitionTypesMixin",
+    "mekanism.EnergyCompatUtilsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

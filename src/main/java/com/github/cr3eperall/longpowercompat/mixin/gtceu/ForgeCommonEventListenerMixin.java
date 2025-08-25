@@ -1,6 +1,6 @@
 package com.github.cr3eperall.longpowercompat.mixin.gtceu;
 
-import com.github.cr3eperall.longpowercompat.gtceu.EUToFNProvider;
+import com.github.cr3eperall.longpowercompat.gtceu.EUToLFeProvider;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.forge.ForgeCommonEventListener;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,7 +22,7 @@ public class ForgeCommonEventListenerMixin {
             cancellable = true
     )
     private static void attachTileCapability(AttachCapabilitiesEvent<BlockEntity> event, CallbackInfo ci) {
-        event.addCapability(GTCEu.id("fn_capability"), new EUToFNProvider(event.getObject()));
+        event.addCapability(GTCEu.id("longFe_capability"), new EUToLFeProvider(event.getObject()));
         ci.cancel();
     }
 }

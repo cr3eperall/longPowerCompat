@@ -1,16 +1,16 @@
 package com.github.cr3eperall.longpowercompat.mbd2.trait;
 
+import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import com.lowdragmc.mbd2.api.capability.recipe.IO;
 import net.minecraftforge.energy.IEnergyStorage;
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
 
-public class FNEnergyStorageWrapper implements IFNEnergyStorage, IEnergyStorage {
-    private final CopiableFNEnergyStorage storage;
+public class LFeEnergyStorageWrapper implements ILongFeStorage, IEnergyStorage {
+    private final CopiableLFeEnergyStorage storage;
     private final IO io;
     private final long maxReceive;
     private final long maxExtract;
 
-    public FNEnergyStorageWrapper(CopiableFNEnergyStorage storage, IO io, long maxReceive, long maxExtract) {
+    public LFeEnergyStorageWrapper(CopiableLFeEnergyStorage storage, IO io, long maxReceive, long maxExtract) {
         this.storage = storage;
         this.io = io;
         this.maxReceive = maxReceive;

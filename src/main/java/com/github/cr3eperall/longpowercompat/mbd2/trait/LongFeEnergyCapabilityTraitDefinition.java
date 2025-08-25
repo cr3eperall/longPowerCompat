@@ -23,36 +23,36 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.network.chat.Component;
 
-import static com.github.cr3eperall.longpowercompat.mbd2.FluxNetworksRecipeCapability.ENERGY_BAR;
-import static com.github.cr3eperall.longpowercompat.mbd2.FluxNetworksRecipeCapability.ENERGY_BASE;
+import static com.github.cr3eperall.longpowercompat.mbd2.LongFeRecipeCapability.ENERGY_BAR;
+import static com.github.cr3eperall.longpowercompat.mbd2.LongFeRecipeCapability.ENERGY_BASE;
 
-@LDLRegister(name="fluxnetworks_energy", group="trait", modID="fluxnetworks")
-public class FluxNetworksCapabilityTraitDefinition extends SimpleCapabilityTraitDefinition {
+@LDLRegister(name="longpower_energy", group="trait", modID="longpowercompat")
+public class LongFeEnergyCapabilityTraitDefinition extends SimpleCapabilityTraitDefinition {
     @Getter
     @Setter
-    @Configurable(name = "config.definition.trait.fluxnetworks_energy.capacity")
+    @Configurable(name = "config.definition.trait.longpower_energy.capacity")
     @NumberRange(range = {1, Long.MAX_VALUE})
     private long capacity = 5000;
     @Getter
     @Setter
-    @Configurable(name = "config.definition.trait.fluxnetworks_energy.max_receive", tips = "config.definition.trait.fluxnetworks_energy.max_receive.tooltip")
+    @Configurable(name = "config.definition.trait.longpower_energy.max_receive", tips = "config.definition.trait.longpower_energy.max_receive.tooltip")
     @NumberRange(range = {0, Long.MAX_VALUE})
     private long maxReceive = 5000;
     @Getter
     @Setter
-    @Configurable(name = "config.definition.trait.fluxnetworks_energy.max_extract", tips = "config.definition.trait.fluxnetworks_energy.max_extract.tooltip")
+    @Configurable(name = "config.definition.trait.longpower_energy.max_extract", tips = "config.definition.trait.longpower_energy.max_extract.tooltip")
     @NumberRange(range = {0, Long.MAX_VALUE})
     private long maxExtract = 5000;
     @Getter
-    @Configurable(name = "config.definition.trait.auto_io", subConfigurable = true, tips = "config.definition.trait.fluxnetworks_energy.auto_io.tooltip")
+    @Configurable(name = "config.definition.trait.auto_io", subConfigurable = true, tips = "config.definition.trait.longpower_energy.auto_io.tooltip")
     private final ToggleAutoIO autoIO = new ToggleAutoIO();
-    @Configurable(name = "config.definition.trait.fluxnetworks_energy.fancy_renderer", subConfigurable = true,
-            tips = "config.definition.trait.fluxnetworks_energy.fancy_renderer.tooltip")
-    private final FluxNetworksFancyRendererSettings fancyRendererSettings = new FluxNetworksFancyRendererSettings(this);
+    @Configurable(name = "config.definition.trait.longpower_energy.fancy_renderer", subConfigurable = true,
+            tips = "config.definition.trait.longpower_energy.fancy_renderer.tooltip")
+    private final LongFeEnergyFancyRendererSettings fancyRendererSettings = new LongFeEnergyFancyRendererSettings(this);
 
     @Override
     public SimpleCapabilityTrait createTrait(MBDMachine mbdMachine) {
-        return new FluxNetworksCapabilityTrait(mbdMachine, this);
+        return new LongFeEnergyCapabilityTrait(mbdMachine, this);
     }
 
     @Override
@@ -81,22 +81,23 @@ public class FluxNetworksCapabilityTraitDefinition extends SimpleCapabilityTrait
         ui.addWidget(energyBarText);
     }
 
+    //TODO: remove energy rounding error in UI
     @Override
     public void initTraitUI(ITrait trait, WidgetGroup group) {
-        if (trait instanceof FluxNetworksCapabilityTrait fnEnergyTrait) {
+        if (trait instanceof LongFeEnergyCapabilityTrait lFeEnergyTrait) {
             var prefix = uiPrefixName();
             WidgetUtils.widgetByIdForEach(group, "^%s$".formatted(prefix), ProgressWidget.class, energyBar -> {
-                energyBar.setProgressSupplier(() -> fnEnergyTrait.storage.getEnergyStoredL() * 1d / fnEnergyTrait.storage.getMaxEnergyStoredL());
+                energyBar.setProgressSupplier(() -> lFeEnergyTrait.storage.getEnergyStoredL() * 1d / lFeEnergyTrait.storage.getMaxEnergyStoredL());
                 energyBar.setDynamicHoverTips(value -> {
-                    var stored = EnergyFormattingUtil.formatExtended(Math.round(fnEnergyTrait.storage.getMaxEnergyStoredL() * value));
-                    var maxStored = EnergyFormattingUtil.formatExtended(fnEnergyTrait.storage.getMaxEnergyStoredL());
-                    return LocalizationUtils.format("config.definition.trait.fluxnetworks_energy.ui_container_hover", stored, maxStored);
+                    var stored = EnergyFormattingUtil.formatExtended(Math.round(lFeEnergyTrait.storage.getMaxEnergyStoredL() * value));
+                    var maxStored = EnergyFormattingUtil.formatExtended(lFeEnergyTrait.storage.getMaxEnergyStoredL());
+                    return LocalizationUtils.format("config.definition.trait.longpower_energy.ui_container_hover", stored, maxStored);
                 });
             });
             WidgetUtils.widgetByIdForEach(group, "^%s_text$".formatted(prefix), TextTextureWidget.class, energyBarText -> {
                 energyBarText.setText(() -> {
-                    var stored = EnergyFormattingUtil.formatCompact(fnEnergyTrait.storage.getEnergyStoredL()) + "FE";
-                    var maxStored = EnergyFormattingUtil.formatCompact(fnEnergyTrait.storage.getMaxEnergyStoredL()) + "FE";
+                    var stored = EnergyFormattingUtil.formatCompact(lFeEnergyTrait.storage.getEnergyStoredL()) + "FE";
+                    var maxStored = EnergyFormattingUtil.formatCompact(lFeEnergyTrait.storage.getMaxEnergyStoredL()) + "FE";
                     return Component.literal(stored + "/" + maxStored);
                 });
             });

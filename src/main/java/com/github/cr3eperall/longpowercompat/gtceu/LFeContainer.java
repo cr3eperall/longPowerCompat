@@ -1,19 +1,18 @@
 package com.github.cr3eperall.longpowercompat.gtceu;
 
 import com.github.cr3eperall.longpowercompat.LongUtils;
-import com.gregtechceu.gtceu.GTCEu;
+import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.MachineTrait;
 import com.gregtechceu.gtceu.common.machine.trait.ConverterTrait;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
 
-public class FnContainer extends MachineTrait implements IFNEnergyStorage {
+public class LFeContainer extends MachineTrait implements ILongFeStorage {
     private final ConverterTrait converter;
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(FnContainer.class);
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(LFeContainer.class);
 
-    public FnContainer(MetaMachine machine, ConverterTrait converter) {
+    public LFeContainer(MetaMachine machine, ConverterTrait converter) {
         super(machine);
         this.converter=converter;
     }
@@ -55,6 +54,8 @@ public class FnContainer extends MachineTrait implements IFNEnergyStorage {
 
     @Override
     public boolean canReceive() {
+        // don't allow fe/LongFe input even if gregfluxology is loaded
+        // only allow if it's fe to eu
         return converter.isFeToEu();
     }
 

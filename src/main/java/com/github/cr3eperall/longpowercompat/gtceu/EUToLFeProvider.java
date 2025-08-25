@@ -1,33 +1,29 @@
 package com.github.cr3eperall.longpowercompat.gtceu;
 
+import com.github.cr3eperall.longpowercompat.LongPowerCapabilities;
 import com.github.cr3eperall.longpowercompat.LongUtils;
-import com.gregtechceu.gtceu.GTCEu;
+import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
-import com.gregtechceu.gtceu.api.capability.compat.CapabilityCompatProvider;
 import com.gregtechceu.gtceu.api.capability.compat.EUToFEProvider;
 import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.api.capability.forge.GTCapability;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.gregtechceu.gtceu.utils.GTMath;
 import com.gregtechceu.gtceu.utils.GTUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
-import sonar.fluxnetworks.api.FluxCapabilities;
-import sonar.fluxnetworks.api.energy.IFNEnergyStorage;
 
 import javax.annotation.Nonnull;
 
-public class EUToFNProvider extends EUToFEProvider {
+public class EUToLFeProvider extends EUToFEProvider {
 
     private long feBuffer;
 
-    public EUToFNProvider(BlockEntity blockEntity) {
+    public EUToLFeProvider(BlockEntity blockEntity) {
         super(blockEntity);
     }
 
@@ -37,10 +33,10 @@ public class EUToFNProvider extends EUToFEProvider {
                 capability != GTCapability.CAPABILITY_ENERGY_CONTAINER)
             return LazyOptional.empty();
 
-        LazyOptional<IFNEnergyStorage> fnEnergyStorage = getUpvalueCapability(FluxCapabilities.FN_ENERGY_STORAGE, facing);
-        if (fnEnergyStorage.isPresent()) {
+        LazyOptional<ILongFeStorage> lFeEnergyStorage = getUpvalueCapability(LongPowerCapabilities.LONG_FE_STORAGE, facing);
+        if (lFeEnergyStorage.isPresent()) {
             return GTCapability.CAPABILITY_ENERGY_CONTAINER.orEmpty(capability,
-                    LazyOptional.of(() -> new GTFNEnergyWrapper(fnEnergyStorage.resolve().get())));
+                    LazyOptional.of(() -> new GTLongFeEnergyWrapper(lFeEnergyStorage.resolve().get())));
         } else {
             LazyOptional<IEnergyStorage> feEnergyStorage = getUpvalueCapability(ForgeCapabilities.ENERGY, facing);
             return feEnergyStorage.isPresent() ?
@@ -50,10 +46,10 @@ public class EUToFNProvider extends EUToFEProvider {
         }
     }
 
-    public class GTFNEnergyWrapper implements IEnergyContainer {
-        private final IFNEnergyStorage energyStorage;
+    public class GTLongFeEnergyWrapper implements IEnergyContainer {
+        private final ILongFeStorage energyStorage;
 
-        public GTFNEnergyWrapper(IFNEnergyStorage energyStorage) {
+        public GTLongFeEnergyWrapper(ILongFeStorage energyStorage) {
             this.energyStorage = energyStorage;
         }
 

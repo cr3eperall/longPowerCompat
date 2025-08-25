@@ -1,6 +1,6 @@
 package com.github.cr3eperall.longpowercompat.mixin.mbd2;
 
-import com.github.cr3eperall.longpowercompat.mbd2.trait.FluxNetworksCapabilityTraitDefinition;
+import com.github.cr3eperall.longpowercompat.mbd2.trait.LongFeEnergyCapabilityTraitDefinition;
 import com.lowdragmc.mbd2.common.data.MBDTraitDefinitionTypes;
 import com.lowdragmc.mbd2.common.trait.TraitDefinition;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +22,7 @@ public abstract class MBDTraitDefinitionTypesMixin {
         remap=false
     )
     private static void init(CallbackInfo ci) {
-        register(FluxNetworksCapabilityTraitDefinition.class);
+        register(LongFeEnergyCapabilityTraitDefinition.class);
     }
 
 }
