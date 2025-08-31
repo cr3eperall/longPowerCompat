@@ -1,5 +1,6 @@
 package com.github.cr3eperall.longpowercompat.mixin.gtceu;
 
+import com.github.cr3eperall.longpowercompat.Config;
 import com.github.cr3eperall.longpowercompat.LongPowerCapabilities;
 import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import com.github.cr3eperall.longpowercompat.gtceu.LFeContainer;
@@ -36,7 +37,11 @@ public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(ConverterMachine machine, int amps, CallbackInfo ci) {
-        this.lFeContainer=new LFeContainer(machine, (ConverterTrait)(Object)this);
+        if (Config.gregTechSupport) {
+            this.lFeContainer=new LFeContainer(machine, (ConverterTrait)(Object)this);
+        }else {
+            this.lFeContainer=null;
+        }
     }
 
     @Inject(method = "serverTick",
@@ -46,28 +51,33 @@ public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
             remap = false
     )
     public void serverTick(CallbackInfo ci, Direction frontFacing) {
-        @SuppressWarnings("ReassignedVariable")
-        ILongFeStorage lFeEnergyContainer=null;
-        Level level = this.machine.getLevel();
-        BlockPos pos = this.machine.getPos().relative(frontFacing);
-        Direction side = frontFacing.getOpposite();
-
-        if (level.getBlockState(pos).hasBlockEntity()) {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-            if (blockEntity != null) {
-                lFeEnergyContainer=(ILongFeStorage)blockEntity.getCapability(LongPowerCapabilities.LONG_FE_STORAGE, side).orElse(null);
-            }
+        if (Config.gregTechSupport && this.lFeContainer==null) {
+            this.lFeContainer=new LFeContainer(machine, (ConverterTrait)(Object)this);
         }
+        if (Config.gregTechSupport && this.lFeContainer!=null) {
+            @SuppressWarnings("ReassignedVariable")
+            ILongFeStorage lFeEnergyContainer = null;
+            Level level = this.machine.getLevel();
+            BlockPos pos = this.machine.getPos().relative(frontFacing);
+            Direction side = frontFacing.getOpposite();
 
-        if (lFeEnergyContainer != null && lFeEnergyContainer.canReceive()) {
-            int euToFeRatio = FeCompat.ratio(false);
-            long amountEU= Math.min(this.getEnergyStored(), this.voltage * this.amps);
-            long feSent = lFeEnergyContainer.receiveEnergyL(FeCompat.toFeLong(amountEU, euToFeRatio), true);
-            long energyUsed =FeCompat.toEu(lFeEnergyContainer.receiveEnergyL(feSent - feSent % euToFeRatio, false), euToFeRatio);
-            if (energyUsed > 0L) {
-                this.setEnergyStored(this.getEnergyStored() - energyUsed);
-                // if we sent any energy we can skip checking for ForgeEnergy
-                ci.cancel();
+            if (level.getBlockState(pos).hasBlockEntity()) {
+                BlockEntity blockEntity = level.getBlockEntity(pos);
+                if (blockEntity != null) {
+                    lFeEnergyContainer = (ILongFeStorage) blockEntity.getCapability(LongPowerCapabilities.LONG_FE_STORAGE, side).orElse(null);
+                }
+            }
+
+            if (lFeEnergyContainer != null && lFeEnergyContainer.canReceive()) {
+                int euToFeRatio = FeCompat.ratio(false);
+                long amountEU = Math.min(this.getEnergyStored(), this.voltage * this.amps);
+                long feSent = lFeEnergyContainer.receiveEnergyL(FeCompat.toFeLong(amountEU, euToFeRatio), true);
+                long energyUsed = FeCompat.toEu(lFeEnergyContainer.receiveEnergyL(feSent - feSent % euToFeRatio, false), euToFeRatio);
+                if (energyUsed > 0L) {
+                    this.setEnergyStored(this.getEnergyStored() - energyUsed);
+                    // if we sent any energy we can skip checking for ForgeEnergy
+                    ci.cancel();
+                }
             }
         }
     }

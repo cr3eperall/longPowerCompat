@@ -3,6 +3,7 @@ package com.github.cr3eperall.longpowercompat.mixin.brandonscore;
 import com.brandon3055.brandonscore.api.power.IOPStorage;
 import com.brandon3055.brandonscore.capability.CapabilityOP;
 import com.brandon3055.brandonscore.capability.OPWrappers;
+import com.github.cr3eperall.longpowercompat.Config;
 import com.github.cr3eperall.longpowercompat.LongPowerCapabilities;
 import com.github.cr3eperall.longpowercompat.brandonscore.LFeToOPWrapper;
 import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
@@ -29,9 +30,11 @@ public class EnergyUtilsMixin {
         if (op.isPresent()) {
             return op.orElseThrow(NullPointerException::new); // not throwing a ImpossibleException here because I can't get it to work.
         }
-        LazyOptional<ILongFeStorage> lFe = provider.getCapability(LongPowerCapabilities.LONG_FE_STORAGE, side);
-        if (lFe.isPresent()) {
-            return new LFeToOPWrapper(lFe.orElseThrow(NullPointerException::new)); // not throwing a ImpossibleException here because I can't get it to work.
+        if(Config.brandonsCoreSupport) {
+            LazyOptional<ILongFeStorage> lFe = provider.getCapability(LongPowerCapabilities.LONG_FE_STORAGE, side);
+            if (lFe.isPresent()) {
+                return new LFeToOPWrapper(lFe.orElseThrow(NullPointerException::new)); // not throwing a ImpossibleException here because I can't get it to work.
+            }
         }
         LazyOptional<IEnergyStorage> fe = provider.getCapability(ForgeCapabilities.ENERGY, side);
         if (fe.isPresent()) {

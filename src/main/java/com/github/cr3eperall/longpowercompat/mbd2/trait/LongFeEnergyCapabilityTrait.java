@@ -11,11 +11,13 @@ import com.lowdragmc.mbd2.api.capability.recipe.IRecipeHandlerTrait;
 import com.lowdragmc.mbd2.api.recipe.MBDRecipe;
 import com.lowdragmc.mbd2.common.machine.MBDMachine;
 import com.lowdragmc.mbd2.common.trait.*;
+import com.lowdragmc.mbd2.common.trait.forgeenergy.EnergyStorageList;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -30,8 +32,9 @@ public class LongFeEnergyCapabilityTrait extends SimpleCapabilityTrait implement
     @Persisted
     @DescSynced
     public final CopiableLFeEnergyStorage storage;
-    private final FluxNetworksRecipeHandler recipeHandler=new FluxNetworksRecipeHandler();
-    private final FluxNetworksStorageCap energyStorageCap = new FluxNetworksStorageCap();
+    private final LongFeRecipeHandler recipeHandler=new LongFeRecipeHandler();
+    private final LongFeStorageCap longEnergyStorageCap = new LongFeStorageCap();
+    private final FeStorageCap feEnergyStorageCap = new FeStorageCap();
 
     public LongFeEnergyCapabilityTrait(MBDMachine machine, LongFeEnergyCapabilityTraitDefinition definition) {
         super(machine, definition);
@@ -60,7 +63,7 @@ public class LongFeEnergyCapabilityTrait extends SimpleCapabilityTrait implement
 
     @Override
     public List<ICapabilityProviderTrait<?>> getCapabilityProviderTraits() {
-        return List.of(energyStorageCap);
+        return List.of(longEnergyStorageCap, feEnergyStorageCap);
     }
 
     @Override
@@ -122,8 +125,8 @@ public class LongFeEnergyCapabilityTrait extends SimpleCapabilityTrait implement
         }
     }
 
-    public class FluxNetworksRecipeHandler extends RecipeHandlerTrait<Long> {
-        protected FluxNetworksRecipeHandler() {
+    public class LongFeRecipeHandler extends RecipeHandlerTrait<Long> {
+        protected LongFeRecipeHandler() {
             super(LongFeEnergyCapabilityTrait.this, LongFeRecipeCapability.CAP);
         }
 
@@ -145,7 +148,7 @@ public class LongFeEnergyCapabilityTrait extends SimpleCapabilityTrait implement
     }
 
     //TODO: check if Forge energy also works with this
-    public class FluxNetworksStorageCap implements ICapabilityProviderTrait<ILongFeStorage> {
+    public class LongFeStorageCap implements ICapabilityProviderTrait<ILongFeStorage> {
 
         @Override
         public IO getCapabilityIO(@Nullable Direction side) {
@@ -165,6 +168,34 @@ public class LongFeEnergyCapabilityTrait extends SimpleCapabilityTrait implement
         @Override
         public ILongFeStorage mergeContents(List<ILongFeStorage> contents) {
             return new LFeEnergyStorageList(contents.toArray(new ILongFeStorage[0]));
+        }
+    }
+
+    public class FeStorageCap implements ICapabilityProviderTrait<IEnergyStorage> {
+
+        @Override
+        public IO getCapabilityIO(@Nullable Direction side) {
+            return LongFeEnergyCapabilityTrait.this.getCapabilityIO(side);
+        }
+
+        @Override
+        public Capability<IEnergyStorage> getCapability() {
+            return ForgeCapabilities.ENERGY;
+        }
+
+        @Override
+        public IEnergyStorage getCapContent(IO io) {
+            return new LFeEnergyStorageWrapper(storage, io, getDefinition().getMaxReceive(), getDefinition().getMaxExtract());
+        }
+
+        @Override
+        public IEnergyStorage mergeContents(List<IEnergyStorage> contents) {
+            if(contents.stream().allMatch((s)->s instanceof ILongFeStorage)) {
+                List<ILongFeStorage> longContents = contents.stream().map(s->(ILongFeStorage)s).toList();
+                return new LFeEnergyStorageList(longContents.toArray(new ILongFeStorage[0]));
+            }else{
+                return new EnergyStorageList(contents.toArray(new IEnergyStorage[0]));
+            }
         }
     }
 }

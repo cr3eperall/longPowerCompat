@@ -1,5 +1,6 @@
 package com.github.cr3eperall.longpowercompat.mixin.mekanism;
 
+import com.github.cr3eperall.longpowercompat.Config;
 import com.github.cr3eperall.longpowercompat.mekanism.LFeEnergyCompat;
 import mekanism.common.config.listener.ConfigBasedCachedSupplier;
 import mekanism.common.config.value.CachedValue;
@@ -36,11 +37,13 @@ public class EnergyCompatUtilsMixin {
         remap = false
     )
     private static void initLoadedCache(CallbackInfo ci) {
-        energyCompats=List.of(
-                new StrictEnergyCompat(),
-                new FNEnergyCompat(),
-                new LFeEnergyCompat(),
-                new ForgeEnergyCompat()
-        );
+        if (Config.mekanismSupport) {
+            energyCompats = List.of(
+                    new StrictEnergyCompat(),
+                    new FNEnergyCompat(),
+                    new LFeEnergyCompat(),
+                    new ForgeEnergyCompat()
+            );
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.github.cr3eperall.longpowercompat.mixin.gtceu;
 
+import com.github.cr3eperall.longpowercompat.Config;
 import com.github.cr3eperall.longpowercompat.gtceu.EUToLFeProvider;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.forge.ForgeCommonEventListener;
@@ -22,7 +23,9 @@ public class ForgeCommonEventListenerMixin {
             cancellable = true
     )
     private static void attachTileCapability(AttachCapabilitiesEvent<BlockEntity> event, CallbackInfo ci) {
-        event.addCapability(GTCEu.id("longFe_capability"), new EUToLFeProvider(event.getObject()));
-        ci.cancel();
+        if (Config.gregTechSupport) {
+            event.addCapability(GTCEu.id("longFe_capability"), new EUToLFeProvider(event.getObject()));
+            ci.cancel();
+        }
     }
 }

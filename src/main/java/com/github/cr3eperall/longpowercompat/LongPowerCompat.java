@@ -5,13 +5,17 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import sonar.fluxnetworks.common.device.TileFluxPlug;
 import sonar.fluxnetworks.common.device.TileFluxPoint;
@@ -29,6 +33,14 @@ public class LongPowerCompat
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    public LongPowerCompat(FMLJavaModLoadingContext context) {
+        IEventBus modEventBus = context.getModEventBus();
+
+        modEventBus.addListener(this::commonSetup);
+
+        MinecraftForge.EVENT_BUS.register(this);
+        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
@@ -66,9 +78,9 @@ public class LongPowerCompat
 
     @SubscribeEvent
     public static void attachTileCapability(AttachCapabilitiesEvent<BlockEntity> event) {
-        if (!ModList.get().isLoaded("fluxnetworks")) return;
+        if (!ModList.get().isLoaded("fluxnetworks") || !Config.fluxNetworksSupport) return;
         if (event.getObject() instanceof TileFluxPlug || event.getObject() instanceof TileFluxPoint){
-            event.addCapability(new ResourceLocation("longpowercompat","lfe_to_fn_capability"), new LFeToFNCapabilityProvider(event.getObject()));
+            event.addCapability(ResourceLocation.fromNamespaceAndPath("longpowercompat","lfe_to_fn_capability"), new LFeToFNCapabilityProvider(event.getObject()));
         }
     }
 }

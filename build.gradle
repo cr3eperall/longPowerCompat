@@ -173,6 +173,8 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:gregtechceu-modern-890405:${gregtech_id}")
     runtimeOnly fg.deobf("curse.maven:gregfluxology-1106032:${greg_fluxology_id}")
     runtimeOnly fg.deobf("curse.maven:multiblocked2-1104057:${multiblocked2_id}")
+    // just to test Long to forge compatibility
+    runtimeOnly fg.deobf("curse.maven:pipez-443900:${pipez_id}")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

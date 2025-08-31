@@ -32,7 +32,7 @@ public class LongFeEnergyFancyRendererSettings extends FancyRendererSettings {
     @Setter
     @Configurable(name = "config.definition.trait.fancy_renderer.color", tips = "config.definition.trait.fancy_renderer.color.tooltip")
     @NumberColor
-    private int color = 0xfa168111;
+    private int color = 0xaafa1681;
     @Getter
     @Setter
     @Configurable(name = "config.definition.trait.fancy_renderer.percent_height", tips = "config.definition.trait.fancy_renderer.percent_height.tooltip")

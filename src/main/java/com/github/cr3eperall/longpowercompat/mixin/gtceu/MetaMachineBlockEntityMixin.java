@@ -1,5 +1,6 @@
 package com.github.cr3eperall.longpowercompat.mixin.gtceu;
 
+import com.github.cr3eperall.longpowercompat.Config;
 import com.github.cr3eperall.longpowercompat.LongPowerCapabilities;
 import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
@@ -30,17 +31,19 @@ public abstract class MetaMachineBlockEntityMixin {
             at = @At(value = "INVOKE", target = "Lcom/gregtechceu/gtceu/GTCEu$Mods;isAE2Loaded()Z"),
             cancellable = true)
     private static <T> void getCapability(MetaMachine machine, @NotNull Capability<T> cap, @Nullable Direction side, CallbackInfoReturnable<LazyOptional<T>> cir) {
-        if (machine instanceof ILongFeStorage energyStorage) {
-            cir.setReturnValue(
-                    LongPowerCapabilities.LONG_FE_STORAGE.orEmpty(cap, LazyOptional.of(() -> energyStorage))
-            );
-        }
+        if (Config.gregTechSupport){
+            if (machine instanceof ILongFeStorage energyStorage) {
+                cir.setReturnValue(
+                        LongPowerCapabilities.LONG_FE_STORAGE.orEmpty(cap, LazyOptional.of(() -> energyStorage))
+                );
+            }
 
-        List<ILongFeStorage> list = getCapabilitiesFromTraits(machine.getTraits(), side, ILongFeStorage.class);
-        if (!list.isEmpty()) {
-            cir.setReturnValue(
-                    LongPowerCapabilities.LONG_FE_STORAGE.orEmpty(cap, LazyOptional.of(() -> (ILongFeStorage) list.get(0)))
-            );
+            List<ILongFeStorage> list = getCapabilitiesFromTraits(machine.getTraits(), side, ILongFeStorage.class);
+            if (!list.isEmpty()) {
+                cir.setReturnValue(
+                        LongPowerCapabilities.LONG_FE_STORAGE.orEmpty(cap, LazyOptional.of(() -> (ILongFeStorage) list.get(0)))
+                );
+            }
         }
     }
 }

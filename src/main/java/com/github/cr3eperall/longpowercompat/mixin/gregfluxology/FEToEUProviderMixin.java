@@ -1,5 +1,6 @@
 package com.github.cr3eperall.longpowercompat.mixin.gregfluxology;
 
+import com.github.cr3eperall.longpowercompat.Config;
 import com.github.cr3eperall.longpowercompat.LongPowerCapabilities;
 import com.github.cr3eperall.longpowercompat.gtceu.LFeEnergyWrapper;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
@@ -27,7 +28,7 @@ public abstract class FEToEUProviderMixin extends CapabilityCompatProvider {
 
     @Inject(method = "getCapability", at = @At("HEAD"), remap = false, cancellable = true)
     public <T> void getCapability(@NotNull Capability<T> capability, Direction facing, CallbackInfoReturnable<LazyOptional<T>> cir) {
-        if (capability == LongPowerCapabilities.LONG_FE_STORAGE) {
+        if (Config.gregFluxologySupport && capability == LongPowerCapabilities.LONG_FE_STORAGE) {
             LazyOptional<IEnergyContainer> energyContainer = this.getUpvalueCapability(GTCapability.CAPABILITY_ENERGY_CONTAINER, facing);
             cir.setReturnValue(energyContainer.isPresent() ?
                     LongPowerCapabilities.LONG_FE_STORAGE.orEmpty(capability,
