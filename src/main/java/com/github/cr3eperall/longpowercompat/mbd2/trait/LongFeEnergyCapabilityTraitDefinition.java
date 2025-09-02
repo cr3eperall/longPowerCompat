@@ -1,6 +1,7 @@
 package com.github.cr3eperall.longpowercompat.mbd2.trait;
 
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
+import com.lowdragmc.lowdraglib.gui.editor.annotation.ConfigSetter;
 import com.lowdragmc.lowdraglib.gui.editor.annotation.Configurable;
 import com.lowdragmc.lowdraglib.gui.editor.annotation.LDLRegister;
 import com.lowdragmc.lowdraglib.gui.editor.annotation.NumberRange;
@@ -81,7 +82,6 @@ public class LongFeEnergyCapabilityTraitDefinition extends SimpleCapabilityTrait
         ui.addWidget(energyBarText);
     }
 
-    //TODO: remove energy rounding error in UI
     @Override
     public void initTraitUI(ITrait trait, WidgetGroup group) {
         if (trait instanceof LongFeEnergyCapabilityTrait lFeEnergyTrait) {
@@ -89,7 +89,7 @@ public class LongFeEnergyCapabilityTraitDefinition extends SimpleCapabilityTrait
             WidgetUtils.widgetByIdForEach(group, "^%s$".formatted(prefix), ProgressWidget.class, energyBar -> {
                 energyBar.setProgressSupplier(() -> lFeEnergyTrait.storage.getEnergyStoredL() * 1d / lFeEnergyTrait.storage.getMaxEnergyStoredL());
                 energyBar.setDynamicHoverTips(value -> {
-                    var stored = EnergyFormattingUtil.formatExtended(Math.round(lFeEnergyTrait.storage.getMaxEnergyStoredL() * value));
+                    var stored = EnergyFormattingUtil.formatExtended(lFeEnergyTrait.storage.getEnergyStoredL());
                     var maxStored = EnergyFormattingUtil.formatExtended(lFeEnergyTrait.storage.getMaxEnergyStoredL());
                     return LocalizationUtils.format("config.definition.trait.longpower_energy.ui_container_hover", stored, maxStored);
                 });

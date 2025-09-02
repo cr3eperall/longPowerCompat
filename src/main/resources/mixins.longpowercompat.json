@@ -14,6 +14,7 @@
     "gtceu.MetaMachineBlockEntityMixin",
     "mbd2.MBDRecipeCapabilitiesMixin",
     "mbd2.MBDTraitDefinitionTypesMixin",
+    "mbd2.NumberConfiguratorMixin",
     "mekanism.EnergyCompatUtilsMixin"
   ],
   "injectors": {

@@ -41,6 +41,7 @@ public abstract class FEToEUProviderMixin extends CapabilityCompatProvider {
     private abstract static class FEEnergyWrapper implements IEnergyStorage{
         /**
          * fix divided by zero crash
+         * TODO: remove when gregfluxology is fixed
          */
         @Inject(method = "receiveEnergy",
                 at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(JJ)J", ordinal = 0),

@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -33,17 +34,20 @@ public class EnergyCompatUtilsMixin {
 
     @Inject(
         method = "initLoadedCache",
-        at= @At(value = "INVOKE", target = "Lmekanism/common/config/listener/ConfigBasedCachedSupplier;<init>(Lnet/minecraftforge/common/util/NonNullSupplier;[Lmekanism/common/config/value/CachedValue;)V"),
+        at= @At(value = "HEAD"),
         remap = false
     )
     private static void initLoadedCache(CallbackInfo ci) {
         if (Config.mekanismSupport) {
-            energyCompats = List.of(
-                    new StrictEnergyCompat(),
-                    new FNEnergyCompat(),
-                    new LFeEnergyCompat(),
-                    new ForgeEnergyCompat()
-            );
+            ArrayList<IEnergyCompat> original = new ArrayList<IEnergyCompat>();
+            for(IEnergyCompat compat : energyCompats) {
+                // add LFeEnergyCompat before Forge's to allow higher throughput when available
+                if (compat instanceof ForgeEnergyCompat) {
+                    original.add(new LFeEnergyCompat());
+                }
+                original.add(compat);
+            }
+            energyCompats = original;
         }
     }
 }

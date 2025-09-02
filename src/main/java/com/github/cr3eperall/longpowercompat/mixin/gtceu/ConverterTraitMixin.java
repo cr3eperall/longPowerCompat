@@ -54,7 +54,7 @@ public abstract class ConverterTraitMixin extends NotifiableEnergyContainer {
         if (Config.gregTechSupport && this.lFeContainer==null) {
             this.lFeContainer=new LFeContainer(machine, (ConverterTrait)(Object)this);
         }
-        if (Config.gregTechSupport && this.lFeContainer!=null) {
+        if (Config.gregTechSupport) {
             @SuppressWarnings("ReassignedVariable")
             ILongFeStorage lFeEnergyContainer = null;
             Level level = this.machine.getLevel();

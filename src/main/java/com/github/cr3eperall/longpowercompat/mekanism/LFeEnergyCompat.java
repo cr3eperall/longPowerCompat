@@ -1,5 +1,6 @@
 package com.github.cr3eperall.longpowercompat.mekanism;
 
+import com.github.cr3eperall.longpowercompat.Config;
 import com.github.cr3eperall.longpowercompat.capability.ILongFeStorage;
 import mekanism.api.energy.IStrictEnergyHandler;
 import mekanism.common.Mekanism;
@@ -34,8 +35,7 @@ public class LFeEnergyCompat implements IEnergyCompat {
 
     @Override
     public boolean isUsable() {
-        //TODO: Add config option to disable this integration
-        return UnitDisplayUtils.EnergyUnit.FORGE_ENERGY.isEnabled() && !MekanismConfig.general.blacklistForge.get();
+        return Config.mekanismSupport && UnitDisplayUtils.EnergyUnit.FORGE_ENERGY.isEnabled() && !MekanismConfig.general.blacklistForge.get();
     }
 
     @Override

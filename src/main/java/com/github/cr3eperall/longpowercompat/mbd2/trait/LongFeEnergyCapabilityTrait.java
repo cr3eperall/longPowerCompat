@@ -147,7 +147,6 @@ public class LongFeEnergyCapabilityTrait extends SimpleCapabilityTrait implement
         }
     }
 
-    //TODO: check if Forge energy also works with this
     public class LongFeStorageCap implements ICapabilityProviderTrait<ILongFeStorage> {
 
         @Override

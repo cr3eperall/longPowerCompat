@@ -22,9 +22,9 @@ public class Config {
             .comment("Whether to enable Flux Networks support (requires Flux Networks to be installed)")
             .define("fluxNetworksSupport", true);
 
-    private static final ForgeConfigSpec.BooleanValue MBD2_SUPPORT = BUILDER
-            .comment("Whether to enable Multiblocked2 support (requires restart and MBD2 to be installed)")
-            .define("mbd2Support", true);
+//    private static final ForgeConfigSpec.BooleanValue MBD2_SUPPORT = BUILDER
+//            .comment("Whether to enable Multiblocked2 support (requires restart and MBD2 to be installed)")
+//            .define("mbd2Support", true);
 
     private static final ForgeConfigSpec.BooleanValue BRANDONSCORE_SUPPORT = BUILDER
             .comment("Whether to enable Brandon's Core(Draconic evolution and related mods) support (requires BrandonsCore to be installed)")
@@ -45,7 +45,7 @@ public class Config {
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static boolean fluxNetworksSupport;
-    public static boolean mbd2Support;
+    public static boolean mbd2Support = true;
     public static boolean brandonsCoreSupport;
     public static boolean mekanismSupport;
     public static boolean gregTechSupport;
@@ -54,7 +54,7 @@ public class Config {
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         fluxNetworksSupport = FLUX_NETWORKS_SUPPORT.get();
-        mbd2Support = MBD2_SUPPORT.get();
+//        mbd2Support = MBD2_SUPPORT.get();
         brandonsCoreSupport = BRANDONSCORE_SUPPORT.get();
         mekanismSupport = MEKANISM_SUPPORT.get();
         gregTechSupport = GREGTECH_SUPPORT.get();
